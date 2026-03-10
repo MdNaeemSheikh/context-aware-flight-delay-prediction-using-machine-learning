@@ -218,7 +218,7 @@ This research introduces a **Context-Aware Segmented Modeling Framework** that c
 
 ```bash
 # 1. Clone this repository
-git clone https://github.com/YOUR_USERNAME/aviation-delay-prediction.git
+git clone https://github.com/MdNaeemSheikh/aviation-delay-prediction.git
 cd aviation-delay-prediction
 
 # 2. Install all dependencies
