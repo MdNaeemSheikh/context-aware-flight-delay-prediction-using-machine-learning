@@ -31,7 +31,7 @@
 
 <br/><br/>
 
-**👤 Author:** &nbsp;[Md Naeem Sheikh](https://www.linkedin.com/in/md-naeem-sheikh) &nbsp;|&nbsp; **📊 Data:** &nbsp;[U.S. Bureau of Transportation Statistics](https://www.transtats.bts.gov/OT_Delay/OT_DelayCause1.asp)
+**👤 Author:** &nbsp;[Md Naeem Sheikh](https://www.linkedin.com/in/md-naeem-sheikh) &nbsp;|&nbsp; **📊 Data Source:** &nbsp;[Airline Delay Cause Dataset — Kaggle](https://www.kaggle.com/datasets/sriharshaeedala/airline-delay)
 
 <br/>
 
@@ -43,7 +43,7 @@
 
 > *"The goal is not merely to predict delays — it is to understand them well enough to prevent them."*
 
-Airline delays impose systemic costs exceeding **$33 billion annually** on the U.S. aviation industry, affecting millions of passengers and creating cascading operational failures. Conventional predictive models treat all airports uniformly — a fundamental methodological flaw that ignores the structurally different delay dynamics between regional airports and high-throughput hub operations.
+Airline delays impose systemic costs exceeding **$33 billion annually** on the U.S. aviation industry, affecting millions of passengers and creating cascading operational failures across global networks. Conventional predictive models treat all airports uniformly — a fundamental methodological flaw that ignores the structurally different delay dynamics between regional airports and high-throughput hub operations.
 
 This research introduces a **Context-Aware Segmented Modeling Framework** that challenges that assumption directly. By fusing unsupervised K-Means clustering with cluster-specific ensemble learners, the pipeline builds operationally intelligent models that understand the environment they predict within. The framework is extended from **prediction → explanation → prescription** through SHAP interaction analysis, DiCE counterfactual generation, algorithmic robustness stress-testing, and a cost-sensitive Economic Impact Assessment — transforming a classification output into a deployable decision-support instrument.
 
@@ -57,13 +57,13 @@ This research introduces a **Context-Aware Segmented Modeling Framework** that c
 
 | # | Contribution | Technique Used |
 |:---:|:---|:---:|
-| 🔵 | **Context-Aware Segmented Modeling** — Airports split into 3 operational clusters; dedicated XGBoost expert per cluster | `K-Means + XGBoost` |
-| 🟢 | **Hybrid Stacking Ensemble** — RF + XGBoost + LightGBM fused via Logistic Regression meta-learner | `StackingClassifier` |
-| 🟣 | **SHAP Interaction Analysis** — Non-linear interaction between traffic volume & weather lag scientifically revealed | `TreeExplainer` |
-| 🔴 | **DiCE Counterfactual Prescriptions** — Minimum operational intervention scenarios generated per high-risk flight | `dice_ml` |
-| 🟠 | **Algorithmic Robustness Stress-Test** — Gaussian noise injected at 6 levels; model degradation curve benchmarked | `Noise Injection` |
-| 🟡 | **Economic Impact Assessment** — Asymmetric cost matrix (FN = $4,000 / FP = $500) quantifies real-world savings | `Cost-Sensitive Eval` |
-| ⚪ | **OSRI Stability Analysis** — Global model's "perfect stability" exposed as degenerate prediction blindness | `Perturbation Testing` |
+| 🔵 | **Context-Aware Segmented Modeling** — Routes segmented into 3 clusters (Regional · Mid-Tier · Elite Hubs); dedicated XGBoost expert model trained per cluster | `K-Means + XGBoost` |
+| 🟢 | **Hybrid Stacking Ensemble** — Random Forest + XGBoost + LightGBM fused via a Logistic Regression meta-learner; decision threshold optimised at t = 0.46 | `StackingClassifier` |
+| 🟣 | **SHAP Interaction Analysis** — Scientific discovery of the non-linear coupling between `arr_flights` (traffic volume) and `lag_weather_rate`; reveals how congestion and weather *jointly* amplify delay probability | `TreeExplainer` |
+| 🔴 | **DiCE Counterfactual Prescriptions** — Minimum operational intervention scenarios generated for every high-risk flight; output saved to CSV and visualised as feature-delta charts | `dice_ml` |
+| 🟠 | **Algorithmic Robustness Stress-Test** — Gaussian noise injected at 6 levels (σ = 0.0 → 0.20); full degradation curve benchmarked for both global and expert models | `Noise Injection` |
+| 🟡 | **Economic Impact Assessment** — Cost-sensitive evaluation on Cluster 2 (Elite Hubs): False Negative (Missed Delay) = **$4,000** · False Positive (False Alarm) = **$500**; quantifies real operational savings vs. reactive baseline | `Cost-Sensitive Eval` |
+| ⚪ | **OSRI Stability Analysis** — Operational Stability & Reliability Index implemented via feature perturbation; exposed the global model's "perfect stability" as degenerate blindness (zero delays predicted), while the Context-Aware Expert Model demonstrated genuine predictive stability | `Perturbation Testing` |
 
 </div>
 
@@ -72,13 +72,12 @@ This research introduces a **Context-Aware Segmented Modeling Framework** that c
 ---
 
 ## 🔬 Full Research Pipeline
-
 ```
 ╔══════════════════════════════════════════════════════════════════════════════╗
 ║                         FULL RESEARCH PIPELINE                              ║
 ╠══════════════════════════════════════════════════════════════════════════════╣
 ║                                                                              ║
-║   📥 RAW DATA  ──  BTS Airline Delay Cause Dataset                          ║
+║   📥 RAW DATA  ──  Kaggle · Airline Delay Cause Dataset                     ║
 ║         │                                                                    ║
 ║         ▼                                                                    ║
 ║   🧹 PHASE 1 — DATA CLEANING                                                ║
@@ -126,7 +125,7 @@ This research introduces a **Context-Aware Segmented Modeling Framework** that c
 ║         ▼                                                                    ║
 ║   💰 PHASE 8 — ECONOMIC IMPACT ASSESSMENT                                   ║
 ║         ├─ Cost matrix: FN = $4,000  |  FP = $500                          ║
-║         └─ Cluster 2 operational savings vs. reactive baseline              ║
+║         └─ Cluster 2 (Elite Hubs) savings quantified vs. reactive baseline  ║
 ║         │                                                                    ║
 ║         ▼                                                                    ║
 ║   📋 PHASE 9 — PRESCRIPTIVE ANALYTICS                                       ║
@@ -145,14 +144,14 @@ This research introduces a **Context-Aware Segmented Modeling Framework** that c
 
 | Layer | Technology | Purpose |
 |:---|:---|:---|
-| **Language** | Python 3.12.12 | Core development |
+| **Language** | Python 3.12.12 (GCC 11.4.0) | Core development |
 | **Platform** | Google Colab | Cloud GPU runtime |
 | **Data** | `pandas`, `numpy` | Processing & feature engineering |
 | **ML Core** | `scikit-learn` | Models, pipelines, evaluation |
 | **Boosting** | `XGBoost`, `LightGBM`, `GBM` | High-performance ensemble learners |
 | **Imbalance** | `SMOTE`, `ADASYN` via `imbalanced-learn` | Synthetic minority oversampling |
 | **Stacking** | `StackingClassifier` + LR meta-learner | Hybrid ensemble architecture |
-| **XAI** | `shap` (TreeExplainer + Interaction Values) | Model interpretation |
+| **XAI** | `shap` (TreeExplainer + Interaction Values) | Model interpretation & scientific discovery |
 | **Counterfactuals** | `dice_ml` | Prescriptive intervention generation |
 | **Validation** | `TimeSeriesSplit` 5-fold | Temporally-correct cross-validation |
 | **Metrics** | Accuracy · Precision · Recall · F1 · **MCC** · AUC | Imbalance-robust evaluation suite |
@@ -170,7 +169,7 @@ This research introduces a **Context-Aware Segmented Modeling Framework** that c
 `shap.TreeExplainer` was deployed per cluster to produce global feature importance rankings and **SHAP interaction value plots**, revealing the non-linear coupling between `arr_flights` (traffic volume) and `lag_weather_rate`. This moves the analysis beyond a passive feature ranking into genuine scientific discovery: understanding *how* congestion and weather jointly amplify delay probability in a non-additive manner.
 
 ### 🔶 DiCE — *What would change this prediction?*
-`dice_ml` generates **Diverse Counterfactual Explanations**: for every flight predicted as delayed, the system computes the minimum operational change required to flip the prediction to no-delay. Results are saved to CSV and visualized as feature delta charts — giving operations teams a concrete, quantified intervention target rather than a passive alert.
+`dice_ml` generates **Diverse Counterfactual Explanations**: for every flight predicted as delayed, the system computes the minimum operational change required to flip the prediction to no-delay. Results are saved to CSV and visualised as feature delta charts — giving operations teams a concrete, quantified intervention target rather than a passive alert.
 
 <br/>
 
@@ -205,7 +204,6 @@ This research introduces a **Context-Aware Segmented Modeling Framework** that c
 ## ⚙️ How to Run
 
 ### ▶️ Option A — Google Colab *(Recommended — zero setup)*
-
 ```
 1. Open https://colab.research.google.com
 2. File → Upload notebook → select the .ipynb file
@@ -215,11 +213,10 @@ This research introduces a **Context-Aware Segmented Modeling Framework** that c
 ```
 
 ### 💻 Option B — Local Environment
-
 ```bash
 # 1. Clone this repository
-git clone https://github.com/MdNaeemSheikh/aviation-delay-prediction.git
-cd aviation-delay-prediction
+git clone https://github.com/MdNaeemSheikh/context-aware-flight-delay-prediction-using-machine-learning.git
+cd context-aware-flight-delay-prediction-using-machine-learning
 
 # 2. Install all dependencies
 pip install -r requirements.txt
@@ -250,9 +247,8 @@ jupyter
 ---
 
 ## 📁 Repository Structure
-
 ```
-📦 aviation-delay-prediction
+📦 context-aware-flight-delay-prediction-using-machine-learning
  ┣ 📓 Context_Aware_Flight_Delay_Prediction_Using_ML.ipynb   ← Full research notebook
  ┣ 📄 README.md                                               ← This file
  ┣ 📄 requirements.txt                                        ← Python dependencies
@@ -268,7 +264,7 @@ jupyter
 
 - [ ] Integrate real-time NWS weather API as a live inference feature
 - [ ] Extend clustering to multi-dimensional airport profiling (volume + cancellation rate + network centrality)
-- [ ] Investigate Temporal Fusion Transformer (TFT) for long-range sequence modeling
+- [ ] Investigate Temporal Fusion Transformer (TFT) for long-range sequence modelling
 - [ ] Deploy expert models as a FastAPI microservice for airline operations dashboards
 - [ ] Apply causal inference to separate correlation from true operational causality
 
@@ -283,7 +279,8 @@ jupyter
 ### Md Naeem Sheikh
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/md-naeem-sheikh)
-[![GitHub](https://img.shields.io/badge/GitHub-Follow-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/YOUR_USERNAME)
+[![GitHub](https://img.shields.io/badge/GitHub-Follow-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/MdNaeemSheikh)
+[![Kaggle](https://img.shields.io/badge/Kaggle-Data%20Source-20BEFF?style=for-the-badge&logo=kaggle&logoColor=white)](https://www.kaggle.com/datasets/sriharshaeedala/airline-delay)
 
 *Researcher in applied machine learning, transportation analytics, and data-driven decision systems.*
 *Actively seeking MSc / PhD research opportunities.*
@@ -298,7 +295,7 @@ jupyter
 
 <img src="https://capsule-render.vercel.app/api?type=waving&color=0:2c5364,50:203a43,100:0f2027&height=120&section=footer" width="100%"/>
 
-*Dataset courtesy of the U.S. Bureau of Transportation Statistics (BTS). For academic and research purposes.*
+*Dataset sourced from Kaggle — [Airline Delay Cause Dataset](https://www.kaggle.com/datasets/sriharshaeedala/airline-delay). For academic and research purposes.*
 
 ⭐ **If this project helped you, please consider starring the repository** ⭐
 
