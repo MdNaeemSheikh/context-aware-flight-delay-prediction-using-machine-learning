@@ -282,8 +282,6 @@ jupyter
 [![GitHub](https://img.shields.io/badge/GitHub-Follow-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/MdNaeemSheikh)
 [![Kaggle](https://img.shields.io/badge/Kaggle-Data%20Source-20BEFF?style=for-the-badge&logo=kaggle&logoColor=white)](https://www.kaggle.com/datasets/sriharshaeedala/airline-delay)
 
-*Researcher in applied machine learning, transportation analytics, and data-driven decision systems.*
-*Actively seeking MSc / PhD research opportunities.*
 
 </div>
 
